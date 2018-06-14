@@ -1,0 +1,15 @@
+{
+  "name": "CamDownloader",
+  "version": "18.6.13.1",
+  "description": "App That will monitor the files and push the videos to my google drive account",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "winston": "^3.0.0"
+  }
+}

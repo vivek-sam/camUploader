@@ -1,0 +1,11 @@
+{
+  "name": "fileuploader",
+  "version": "18.6.20",
+  "description": "Upload files to google drive",
+  "main": "quickstart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

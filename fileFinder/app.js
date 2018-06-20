@@ -5,8 +5,8 @@ const fs = require('fs');
 var dirwatch = require("./modules/DirectoryWatcher.js");
 
 const env = process.env.NODE_ENV || 'development';
-const logDir = '../working/log';
-const locksDir = '../working/lock';
+const logDir = '../../working/log';
+const locksDir = '../../working/lock';
 
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {

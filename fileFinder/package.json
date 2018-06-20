@@ -1,6 +1,6 @@
 {
   "name": "CamDownloader",
-  "version": "18.6.13.1",
+  "version": "18.6.1-3.1",
   "description": "App That will monitor the files and push the videos to my google drive account",
   "main": "app.js",
   "scripts": {
@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "winston": "^3.0.0"
+    "winston": "^2.4.3"
   }
 }

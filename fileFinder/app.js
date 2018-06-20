@@ -5,11 +5,17 @@ const fs = require('fs');
 var dirwatch = require("./modules/DirectoryWatcher.js");
 
 const env = process.env.NODE_ENV || 'development';
-const logDir = 'log';
+const logDir = '../working/log';
+const locksDir = '../working/lock';
 
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
+}
+
+// Create the locks directory if it does not exist
+if (!fs.existsSync(locksDir)) {
+    fs.mkdirSync(locksDir);
 }
 
 const tsFormat = () => (new Date()).toLocaleTimeString();
@@ -76,6 +82,8 @@ directoryMonitor.on("fileChanged", function (fileDetail, changes) {
 // log to the console when a file is added.
 directoryMonitor.on("fileAdded", function (fileDetail) {
     logger.info("File Added: " + fileDetail.fullPath);
+
+    //Now that a file is added.. 
 });
 
 // Let us know that directory monitoring is happening and where.

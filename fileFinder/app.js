@@ -46,7 +46,7 @@ var logger = new (winston.Logger)({
 // you can monitor only a single folder and none of its child
 // directories by simply changing the recursive parameter to
 // to false
-var directoryMonitor = new dirwatch.DirectoryWatcher("F:\\Vivek\\Projects\\HomeProjects", true);
+var directoryMonitor = new dirwatch.DirectoryWatcher("/srv/dev-disk-by-label-MyDrive/mydrive/camvideos", true);
 
 // start the monitor and have it check for updates
 // every half second.

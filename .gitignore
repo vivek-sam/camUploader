@@ -1,4 +1,5 @@
 
 .vscode/launch.json
-fileFinder/node_modules/async/.jshintrc
-log/results.log
+fileFinder/node_modules/
+fileUploader/node_modules/
+log/

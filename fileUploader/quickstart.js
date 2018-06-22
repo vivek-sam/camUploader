@@ -133,11 +133,12 @@ function listFiles(auth) {
   if (fs.existsSync(lock1)) {
     //as such a lock must not exist.. as we will read, upload and unlock syncronously... 
   } else {
-    //no lock.. lock the file and take it for reading...
-    fs.closeSync(fs.openSync(lock1, 'w'));
-    logger.info('Created Lock 1 for uploading...');
-
     if (fs.existsSync(data1)) {
+
+      //no lock.. lock the file and take it for reading...
+      fs.closeSync(fs.openSync(lock1, 'w'));
+      logger.info('Created Lock 1 for uploading...');
+      
       //read and upload everything from this file.... 
       Sync(function(){
 

@@ -1,8 +1,8 @@
 const fs = require('fs');
 var path = require("path");
-/*
+
 const winston = require('winston');
-*/
+
 const readline = require('readline');
 const {google} = require('googleapis');
 
@@ -19,7 +19,7 @@ const filedone = `${locksDir}/filelist.done`
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 const TOKEN_PATH = 'credentials.json';
 
-/*
+
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
@@ -43,7 +43,7 @@ var logger = new (winston.Logger)({
     })
     ]
 });
-*/
+
 
 // Load client secrets from a local file.
 fs.readFile('client_secret.json', (err, content) => {
@@ -185,7 +185,7 @@ function listFiles(auth) {
       fs.unlinkSync(lock1);
       logger.info('Deleting Lock 1...');
     }
-    
+
     if(fs.existsSync(data2)) {
       //this means there is a data 2 which we need to work on
 

@@ -4,6 +4,9 @@ const winston = require('winston');
 const readline = require('readline');
 const {google} = require('googleapis');
 
+const logDir = '../../working/log';
+const locksDir = '../../working/lock';
+
 const lock1 = `${locksDir}/filelist1.lock`
 const lock2 = `${locksDir}/filelist2.lock`
 const data1 = `${locksDir}/filelist1.data`

@@ -177,10 +177,10 @@ function listFiles(auth) {
                   // Handle error
                   logger.info("Failed..." + fullpath);
                   logger.error("Error" + err);
-                  fs.appendFileSync(filedone, "Error : " + file + "\r\n");
+                  fs.appendFileSync(filedone, "Error : " + `${file.name}` + "\r\n");
                 } else {
-                  logger.info("Succeeded... File Id: "+ file.id);
-                  fs.appendFileSync(filedone, "Uploaded : " + file + "\r\n");
+                  logger.info("Succeeded... File Id: " + `${file.id}`);
+                  fs.appendFileSync(filedone, "Uploaded : " + `${file.name}` + "\r\n");
                 }
               }); 
             }
@@ -245,10 +245,10 @@ function listFiles(auth) {
                   // Handle error
                   logger.info("Failed..." + fullpath);
                   logger.error("Error" + err);
-                  fs.appendFileSync(filedone, "Error : " + file + "\r\n");
+                  fs.appendFileSync(filedone, "Error : " + `${file.name}` + "\r\n");
                 } else {
-                  logger.info("Succeeded... File Id: "+ file.id + "\r\n");
-                  fs.appendFileSync(filedone, "Uploaded : " + file + "\r\n");
+                  logger.info("Succeeded... File Id: " + `${file.id}` + "\r\n");
+                  fs.appendFileSync(filedone, "Uploaded : " + `${file.name}` + "\r\n");
                 }
               });
             }

@@ -8,6 +8,11 @@ const env = process.env.NODE_ENV || 'development';
 const logDir = '../../working/log';
 const locksDir = '../../working/lock';
 
+const lock1 = `${logDir}/filelist1.lock`
+const lock2 = `${logDir}/filelist2.lock`
+const data1 = `${logDir}/filelist1.data`
+const data2 = `${logDir}/filelist2.data`
+
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
@@ -54,27 +59,27 @@ directoryMonitor.start(500);
 
 // Log to the console when a file is removed
 directoryMonitor.on("fileRemoved", function (filePath) {
-    logger.info("File Deleted: " + filePath);
+    logger.debug("File Deleted: " + filePath);
 });
 
 // Log to the console when a folder is removed
 directoryMonitor.on("folderRemoved", function (folderPath) {
-    logger.info("Folder Removed: " + folderPath);
+    logger.debug("Folder Removed: " + folderPath);
 });
 
 // log to the console when a folder is added
 directoryMonitor.on("folderAdded", function (folderPath) {
-    logger.info("Folder Added: " + folderPath);
+    logger.debug("Folder Added: " + folderPath);
 });
 
 // Log to the console when a file is changed.
 directoryMonitor.on("fileChanged", function (fileDetail, changes) {
-    logger.info("File Changed: " + fileDetail.fullPath);
+    logger.debug("File Changed: " + fileDetail.fullPath);
   for (var key in changes) {
-    logger.info("  + " + key + " changed...");
-    logger.info("    - From: " + ((changes[key].baseValue instanceof Date) ? 
+    logger.debug("  + " + key + " changed...");
+    logger.debug("    - From: " + ((changes[key].baseValue instanceof Date) ? 
     changes[key].baseValue.toISOString() : changes[key].baseValue));
-    logger.info("    - To  : " + ((changes[key].comparedValue instanceof Date) ? 
+    logger.debug("    - To  : " + ((changes[key].comparedValue instanceof Date) ? 
     changes[key].comparedValue.toISOString() : changes[key].comparedValue));
   }
 });
@@ -84,6 +89,24 @@ directoryMonitor.on("fileAdded", function (fileDetail) {
     logger.info("File Added: " + fileDetail.fullPath);
 
     //Now that a file is added.. 
+    if (fs.existsSync(lock1)) {
+        // Do something
+        if (fs.existsSync(lock2)) {
+            // Both the locks are in place.. what do we do ?
+            // lets wait for a bit and try again
+            // remove lock 1 & lock 2 and proceed...
+            fs.unlinkSync(lock1);
+            fs.unlinkSync(lock2);
+            //write it into first file
+            fs.appendFileSync(data1, fileDetail.fullPath);
+        } else {
+            //write it into second file
+            fs.appendFileSync(data2, fileDetail.fullPath);
+        }
+    } else {
+        //write it into first file
+        fs.appendFileSync(data1, fileDetail.fullPath);
+    }
 });
 
 // Let us know that directory monitoring is happening and where.

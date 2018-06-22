@@ -1,6 +1,9 @@
 const fs = require('fs');
+var path = require("path");
 const readline = require('readline');
 const {google} = require('googleapis');
+
+require('../common');
 
 // If modifying these scopes, delete credentials.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
@@ -85,25 +88,104 @@ function listFiles(auth) {
     }
   });
 
-  var fileMetadata = {
-  'name': 'A20180602_170354_170408.264'
-};
-var media = {
-  mimeType: 'video/H264',
-  body: fs.createReadStream('/home/viveksamuploader/uploadfiles/A20180602_170354_170408.264')
-};
 
-drive.files.create({
-  resource: fileMetadata,
-  media: media,
-  fields: 'id'
-}, function (err, file) {
-  if (err) {
-    // Handle error
-    console.error(err);
+// check which file to be uploaded...
+if (fs.existsSync(lock1)) {
+  //as such a lock must not exist.. as we will read, upload and unlock syncronously... 
+} else {
+  //no lock.. lock the file and take it for reading...
+  fs.closeSync(fs.openSync(lock1, 'w'));
+  if (fs.existsSync(data1)) {
+    //read and upload everything from this file.... 
+    fs.readFileSync(data1).toString().split('\n').forEach(function (fullpath) { 
+      console.log(fullpath);
+      // upload this file.... 
+      var filename = path.basename(fullepath);
+      var mType = 'video/H264';
+      if(path.extname(filename) === 'jpg') {
+        mType = 'image/jpeg';
+      }
+
+      var fileMetadata = {
+        'name': filename
+      };
+
+      var media = {
+        mimeType: mType,
+        body: fs.createReadStream(fullpath)
+      };
+      
+      drive.files.create({
+        resource: fileMetadata,
+        media: media,
+        fields: 'id'
+      }, function (err, file) {
+        if (err) {
+          // Handle error
+          console.error(err);
+          fs.appendFileSync(filedone, "Error : " + file);
+        } else {
+          console.log('File Id: ', file.id);
+          fs.appendFileSync(filedone, "Uploaded : " + file);
+        }
+      });
+
+    });
+    //delete the lock after uploading...
+    fs.unlinkSync(lock1);
   } else {
-    console.log('File Id: ', file.id);
+    //delete the lock
+    fs.unlinkSync(lock1);
   }
-});
+  if(fs.existsSync(data2)) {
+    //this means there is a data 2 which we need to work on
+
+    //first lock the file... 
+    fs.closeSync(fs.openSync(lock2, 'w'));
+    
+    fs.readFileSync(data2).toString().split('\n').forEach(function (fullpath) { 
+      console.log(fullpath);
+      // upload this file.... 
+      var filename = path.basename(fullepath);
+      var mType = 'video/H264';
+      if(path.extname(filename) === 'jpg') {
+        mType = 'image/jpeg';
+      }
+
+      var fileMetadata = {
+        'name': filename
+      };
+
+      var media = {
+        mimeType: mType,
+        body: fs.createReadStream(fullpath)
+      };
+      
+      drive.files.create({
+        resource: fileMetadata,
+        media: media,
+        fields: 'id'
+      }, function (err, file) {
+        if (err) {
+          // Handle error
+          console.error(err);
+        } else {
+          console.log('File Id: ', file.id);
+        }
+      });
+
+    });
+    //delete the lock after uploading...
+    fs.unlinkSync(lock1);
+  } else {
+
+    //check of lock exists.. if yes delete it...
+    if(fs.existsSync(lock2)) {
+      fs.unlinkSync(lock2); // delete it because the file does not exist...
+    }
+  }
+}
+
+
 
 }

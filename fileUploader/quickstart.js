@@ -150,7 +150,7 @@ function listFiles(auth) {
           var filename = path.basename(fullpath);
           var mType = 'video/H264';
           logger.info("File Type : " + path.extname(filename));
-          if(path.extname(filename) === 'jpg') {
+          if(path.extname(filename) === '.jpg') {
             mType = 'image/jpeg';
           }
 
@@ -210,7 +210,7 @@ function listFiles(auth) {
           var filename = path.basename(fullpath);
           logger.info("File Type : " + path.extname(filename));
           var mType = 'video/H264';
-          if(path.extname(filename) === 'jpg') {
+          if(path.extname(filename) === '.jpg') {
             mType = 'image/jpeg';
           }
 

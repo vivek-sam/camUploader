@@ -135,7 +135,7 @@ if (fs.existsSync(lock1)) {
       
       logger.info("File : " + fullpath);
       // upload this file.... 
-      var filename = path.basename(fullepath);
+      var filename = path.basename(fullpath);
       var mType = 'video/H264';
       if(path.extname(filename) === 'jpg') {
         mType = 'image/jpeg';

@@ -175,8 +175,8 @@ function listFiles(auth) {
               }, function (err, file) {
                 if (err) {
                   // Handle error
-                  logger.info("Failed..." + file);
-                  logger.error(err);
+                  logger.info("Failed..." + fullpath);
+                  logger.error("Error" + err);
                   fs.appendFileSync(filedone, "Error : " + file + "\r\n");
                 } else {
                   logger.info("Succeeded... File Id: "+ file.id);
@@ -243,8 +243,8 @@ function listFiles(auth) {
               }, function (err, file) {
                 if (err) {
                   // Handle error
-                  logger.info("Failed..." + file);
-                  logger.error(err);
+                  logger.info("Failed..." + fullpath);
+                  logger.error("Error" + err);
                   fs.appendFileSync(filedone, "Error : " + file + "\r\n");
                 } else {
                   logger.info("Succeeded... File Id: "+ file.id + "\r\n");

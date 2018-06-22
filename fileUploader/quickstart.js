@@ -152,10 +152,12 @@ function listFiles(auth) {
           logger.info("File Type : " + path.extname(filename));
           if(path.extname(filename) === '.jpg') {
             mType = 'image/jpeg';
+          } else if(path.extname(filename) === '.264') {
+            mType = 'video/H264';
           }
 
           logger.info("mediaType : " + mType);
-          /*
+          
           var fileMetadata = {
             'name': filename
           };
@@ -180,7 +182,7 @@ function listFiles(auth) {
               fs.appendFileSync(filedone, "Uploaded : " + file);
             }
           });
-          */
+          
         }
 
       });
@@ -215,7 +217,7 @@ function listFiles(auth) {
           }
 
           logger.info("mediaType : " + mType);
-          /*
+          
 
           var fileMetadata = {
             'name': filename
@@ -241,7 +243,7 @@ function listFiles(auth) {
               fs.appendFileSync(filedone, "Uploaded : " + file);
             }
           });
-          */
+          
         }
       });
       //delete the lock after uploading...

@@ -223,6 +223,7 @@ function listFiles(auth) {
             'name': filename
           };
 
+          logger.info("Uploading File : " + fullpath);
           var media = {
             mimeType: mType,
             body: fs.createReadStream(fullpath)
@@ -235,12 +236,12 @@ function listFiles(auth) {
           }, function (err, file) {
             if (err) {
               // Handle error
-              logger.info("Failed...");
+              logger.info("Failed..." + file);
               logger.error(err);
-              fs.appendFileSync(filedone, "Error : " + file);
+              fs.appendFileSync(filedone, "Error : " + file + "\r\n");
             } else {
-            logger.info("Succeeded... File Id: "+file.id);
-              fs.appendFileSync(filedone, "Uploaded : " + file);
+              logger.info("Succeeded... File Id: "+ file.id + "\r\n");
+              fs.appendFileSync(filedone, "Uploaded : " + file + "\r\n");
             }
           });
           

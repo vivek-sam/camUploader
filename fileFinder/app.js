@@ -8,10 +8,10 @@ const env = process.env.NODE_ENV || 'development';
 const logDir = '../../working/log';
 const locksDir = '../../working/lock';
 
-const lock1 = `${logDir}/filelist1.lock`
-const lock2 = `${logDir}/filelist2.lock`
-const data1 = `${logDir}/filelist1.data`
-const data2 = `${logDir}/filelist2.data`
+const lock1 = `${locksDir}/filelist1.lock`
+const lock2 = `${locksDir}/filelist2.lock`
+const data1 = `${locksDir}/filelist1.data`
+const data2 = `${locksDir}/filelist2.data`
 
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {
@@ -98,14 +98,14 @@ directoryMonitor.on("fileAdded", function (fileDetail) {
             fs.unlinkSync(lock1);
             fs.unlinkSync(lock2);
             //write it into first file
-            fs.appendFileSync(data1, fileDetail.fullPath);
+            fs.appendFileSync(data1, fileDetail.fullPath + "\r\n");
         } else {
             //write it into second file
-            fs.appendFileSync(data2, fileDetail.fullPath);
+            fs.appendFileSync(data2, fileDetail.fullPath + "\r\n");
         }
     } else {
         //write it into first file
-        fs.appendFileSync(data1, fileDetail.fullPath);
+        fs.appendFileSync(data1, fileDetail.fullPath + "\r\n");
     }
 });
 

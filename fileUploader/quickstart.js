@@ -4,11 +4,11 @@ const winston = require('winston');
 const readline = require('readline');
 const {google} = require('googleapis');
 
-const lock1 = `${logDir}/filelist1.lock`
-const lock2 = `${logDir}/filelist2.lock`
-const data1 = `${logDir}/filelist1.data`
-const data2 = `${logDir}/filelist2.data`
-const filedone = `${logDir}/filelist.done`
+const lock1 = `${locksDir}/filelist1.lock`
+const lock2 = `${locksDir}/filelist2.lock`
+const data1 = `${locksDir}/filelist1.data`
+const data2 = `${locksDir}/filelist2.data`
+const filedone = `${locksDir}/filelist.done`
 
 // If modifying these scopes, delete credentials.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive'];

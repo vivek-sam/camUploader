@@ -1,6 +1,8 @@
 const fs = require('fs');
 var path = require("path");
+/*
 const winston = require('winston');
+*/
 const readline = require('readline');
 const {google} = require('googleapis');
 
@@ -17,6 +19,7 @@ const filedone = `${locksDir}/filelist.done`
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 const TOKEN_PATH = 'credentials.json';
 
+/*
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
@@ -29,7 +32,7 @@ var logger = new (winston.Logger)({
     new (winston.transports.Console)({
       timestamp: tsFormat,
       colorize: true,
-      level: 'info'
+      level: 'silly'
     }),
     new (winston.transports.File)({
       filename: `${logDir}/uploadresults.log`,
@@ -40,6 +43,7 @@ var logger = new (winston.Logger)({
     })
     ]
 });
+*/
 
 // Load client secrets from a local file.
 fs.readFile('client_secret.json', (err, content) => {
@@ -104,6 +108,8 @@ function getAccessToken(oAuth2Client, callback) {
  */
 function listFiles(auth) {
   const drive = google.drive({version: 'v3', auth});
+  
+  /*
   drive.files.list({
     pageSize: 10,
     fields: 'nextPageToken, files(id, name)',
@@ -111,133 +117,132 @@ function listFiles(auth) {
     if (err) return logger.error('The API returned an error: ' + err);
     const files = data.files;
     if (files.length) {
-      logger.info('Files:');
+      console.info('Files:');
       files.map((file) => {
-        logger.info(`${file.name} (${file.id})`);
+        console.info(`${file.name} (${file.id})`);
       });
     } else {
-      logger.info('No files found.');
+      console.info('No files found.');
     }
   });
+  */
 
 
-// check which file to be uploaded...
-if (fs.existsSync(lock1)) {
-  //as such a lock must not exist.. as we will read, upload and unlock syncronously... 
-} else {
-  //no lock.. lock the file and take it for reading...
-  fs.closeSync(fs.openSync(lock1, 'w'));
-  logger.info('Created Lock 1 for uploading...');
-
-  if (fs.existsSync(data1)) {
-    //read and upload everything from this file.... 
-    fs.readFileSync(data1).toString().split('\n').forEach(function (fullpath) { 
-      
-      logger.info("File : " + fullpath);
-      // upload this file.... 
-      var filename = path.basename(fullpath);
-      var mType = 'video/H264';
-      if(path.extname(filename) === 'jpg') {
-        mType = 'image/jpeg';
-      }
-
-      logger.info("mediaType : " + mType);
-      /*
-      var fileMetadata = {
-        'name': filename
-      };
-
-      var media = {
-        mimeType: mType,
-        body: fs.createReadStream(fullpath)
-      };
-      
-      drive.files.create({
-        resource: fileMetadata,
-        media: media,
-        fields: 'id'
-      }, function (err, file) {
-        if (err) {
-          // Handle error
-          logger.info("Failed...");
-          logger.error(err);
-          fs.appendFileSync(filedone, "Error : " + file);
-        } else {
-          logger.info("Succeeded... File Id: "+file.id);
-          fs.appendFileSync(filedone, "Uploaded : " + file);
-        }
-      });
-      */
-
-    });
-    //delete the lock after uploading...
-    fs.unlinkSync(lock1);
-    logger.info('Deleting Lock 1...');
+  // check which file to be uploaded...
+  if (fs.existsSync(lock1)) {
+    //as such a lock must not exist.. as we will read, upload and unlock syncronously... 
   } else {
-    //delete the lock
-    fs.unlinkSync(lock1);
-    logger.info('Deleting Lock 1...');
-  }
-  if(fs.existsSync(data2)) {
-    //this means there is a data 2 which we need to work on
+    //no lock.. lock the file and take it for reading...
+    fs.closeSync(fs.openSync(lock1, 'w'));
+    logger.info('Created Lock 1 for uploading...');
 
-    logger.info("File : " + fullpath);
-    //first lock the file... 
-    fs.closeSync(fs.openSync(lock2, 'w'));
-    logger.info('Created Lock 2 for uploading...');
+    if (fs.existsSync(data1)) {
+      //read and upload everything from this file.... 
+      fs.readFileSync(data1).toString().split('\n').forEach(function (fullpath) { 
+        
+        logger.info("File : " + fullpath);
+        // upload this file.... 
+        var filename = path.basename(fullpath);
+        var mType = 'video/H264';
+        if(path.extname(filename) === 'jpg') {
+          mType = 'image/jpeg';
+        }
+
+        logger.info("mediaType : " + mType);
+        /*
+        var fileMetadata = {
+          'name': filename
+        };
+
+        var media = {
+          mimeType: mType,
+          body: fs.createReadStream(fullpath)
+        };
+        
+        drive.files.create({
+          resource: fileMetadata,
+          media: media,
+          fields: 'id'
+        }, function (err, file) {
+          if (err) {
+            // Handle error
+            logger.info("Failed...");
+            logger.error(err);
+            fs.appendFileSync(filedone, "Error : " + file);
+          } else {
+            logger.info("Succeeded... File Id: "+file.id);
+            fs.appendFileSync(filedone, "Uploaded : " + file);
+          }
+        });
+        */
+
+      });
+      //delete the lock after uploading...
+      fs.unlinkSync(lock1);
+      logger.info('Deleting Lock 1...');
+    } else {
+      //delete the lock
+      fs.unlinkSync(lock1);
+      logger.info('Deleting Lock 1...');
+    }
     
-    fs.readFileSync(data2).toString().split('\n').forEach(function (fullpath) { 
-      console.log(fullpath);
-      // upload this file.... 
-      var filename = path.basename(fullepath);
-      var mType = 'video/H264';
-      if(path.extname(filename) === 'jpg') {
-        mType = 'image/jpeg';
-      }
+    if(fs.existsSync(data2)) {
+      //this means there is a data 2 which we need to work on
 
-      logger.info("mediaType : " + mType);
-      /*
-
-      var fileMetadata = {
-        'name': filename
-      };
-
-      var media = {
-        mimeType: mType,
-        body: fs.createReadStream(fullpath)
-      };
+      logger.info("File : " + fullpath);
+      //first lock the file... 
+      fs.closeSync(fs.openSync(lock2, 'w'));
+      logger.info('Created Lock 2 for uploading...');
       
-      drive.files.create({
-        resource: fileMetadata,
-        media: media,
-        fields: 'id'
-      }, function (err, file) {
-        if (err) {
-          // Handle error
-          logger.info("Failed...");
-          logger.error(err);
-          fs.appendFileSync(filedone, "Error : " + file);
-        } else {
-         logger.info("Succeeded... File Id: "+file.id);
-          fs.appendFileSync(filedone, "Uploaded : " + file);
+      fs.readFileSync(data2).toString().split('\n').forEach(function (fullpath) { 
+        console.log(fullpath);
+        // upload this file.... 
+        var filename = path.basename(fullepath);
+        var mType = 'video/H264';
+        if(path.extname(filename) === 'jpg') {
+          mType = 'image/jpeg';
         }
+
+        logger.info("mediaType : " + mType);
+        /*
+
+        var fileMetadata = {
+          'name': filename
+        };
+
+        var media = {
+          mimeType: mType,
+          body: fs.createReadStream(fullpath)
+        };
+        
+        drive.files.create({
+          resource: fileMetadata,
+          media: media,
+          fields: 'id'
+        }, function (err, file) {
+          if (err) {
+            // Handle error
+            logger.info("Failed...");
+            logger.error(err);
+            fs.appendFileSync(filedone, "Error : " + file);
+          } else {
+          logger.info("Succeeded... File Id: "+file.id);
+            fs.appendFileSync(filedone, "Uploaded : " + file);
+          }
+        });
+        */
+
       });
-      */
-
-    });
-    //delete the lock after uploading...
-    fs.unlinkSync(lock2);
-    logger.info('Deleting Lock 2...');
-  } else {
-
-    //check of lock exists.. if yes delete it...
-    if(fs.existsSync(lock2)) {
-      fs.unlinkSync(lock2); // delete it because the file does not exist...
+      //delete the lock after uploading...
+      fs.unlinkSync(lock2);
       logger.info('Deleting Lock 2...');
+    } else {
+
+      //check of lock exists.. if yes delete it...
+      if(fs.existsSync(lock2)) {
+        fs.unlinkSync(lock2); // delete it because the file does not exist...
+        logger.info('Deleting Lock 2...');
+      }
     }
   }
-}
-
-
-
 }

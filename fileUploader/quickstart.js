@@ -1,5 +1,6 @@
 const fs = require('fs');
 var path = require("path");
+var Sync = require('sync');
 
 const winston = require('winston');
 
@@ -138,57 +139,59 @@ function listFiles(auth) {
 
     if (fs.existsSync(data1)) {
       //read and upload everything from this file.... 
-      fs.readFileSync(data1).toString().split('\n').forEach(function (fullpath) { 
-        
-        logger.info("File 1 : " + fullpath);
+      Sync(function(){
 
-        fullpath = fullpath.trim();
-
-        if(fullpath.trim()) {
-  
-          // upload this file.... 
-          var filename = path.basename(fullpath);
-          var mType = 'video/H264';
-          logger.info("File Type : " + path.extname(filename));
-          if(path.extname(filename) === '.jpg') {
-            mType = 'image/jpeg';
-          } else if(path.extname(filename) === '.264') {
-            mType = 'video/H264';
-          }
-
-          logger.info("mediaType : " + mType);
+        fs.readFileSync(data1).toString().split('\n').forEach(function (fullpath) { 
           
-          var fileMetadata = {
-            'name': filename
-          };
+          logger.info("File 1 : " + fullpath);
 
-          var media = {
-            mimeType: mType,
-            body: fs.createReadStream(fullpath)
-          };
-          
-          drive.files.create({
-            resource: fileMetadata,
-            media: media,
-            fields: 'id'
-          }, function (err, file) {
-            if (err) {
-              // Handle error
-              logger.info("Failed...");
-              logger.error(err);
-              fs.appendFileSync(filedone, "Error : " + file);
-            } else {
-              logger.info("Succeeded... File Id: "+file.id);
-              fs.appendFileSync(filedone, "Uploaded : " + file);
+          fullpath = fullpath.trim();
+
+          if(fullpath.trim()) {
+    
+            // upload this file.... 
+            var filename = path.basename(fullpath);
+            var mType = 'video/H264';
+            if(path.extname(filename) === '.jpg') {
+              mType = 'image/jpeg';
+            } else if(path.extname(filename) === '.264') {
+              mType = 'video/H264';
             }
-          });
-          
-        }
+            //for now upload only images...
+            if(mType === 'image/jpeg') {
+              var fileMetadata = {
+                'name': filename
+              };
 
-      });
+              var media = {
+                mimeType: mType,
+                body: fs.createReadStream(fullpath)
+              };
+              
+              drive.files.create({
+                resource: fileMetadata,
+                media: media,
+                fields: 'id'
+              }, function (err, file) {
+                if (err) {
+                  // Handle error
+                  logger.info("Failed..." + file);
+                  logger.error(err);
+                  fs.appendFileSync(filedone, "Error : " + file + "\r\n");
+                } else {
+                  logger.info("Succeeded... File Id: "+ file.id);
+                  fs.appendFileSync(filedone, "Uploaded : " + file + "\r\n");
+                }
+              }); 
+            }
+          }
+        });
+    });
+
       //delete the lock after uploading...
       fs.unlinkSync(lock1);
       logger.info('Deleting Lock 1...');
+      //also delete the file 1.. since its over.. 
     } else {
       //delete the lock
       fs.unlinkSync(lock1);
@@ -202,50 +205,53 @@ function listFiles(auth) {
       fs.closeSync(fs.openSync(lock2, 'w'));
       logger.info('Created Lock 2 for uploading...');
       
-      fs.readFileSync(data2).toString().split('\n').forEach(function (fullpath) { 
-        logger.info("File 2 : " + fullpath);
+      Sync(function(){
+        fs.readFileSync(data2).toString().split('\n').forEach(function (fullpath) { 
+          logger.info("File 2 : " + fullpath);
 
-        fullpath = fullpath.trim();
+          fullpath = fullpath.trim();
 
-        if(fullpath.trim()) {
-          // upload this file.... 
-          var filename = path.basename(fullpath);
-          logger.info("File Type : " + path.extname(filename));
-          var mType = 'video/H264';
-          if(path.extname(filename) === '.jpg') {
-            mType = 'image/jpeg';
-          }
-
-          logger.info("mediaType : " + mType);
-          
-
-          var fileMetadata = {
-            'name': filename
-          };
-
-          logger.info("Uploading File : " + fullpath);
-          var media = {
-            mimeType: mType,
-            body: fs.createReadStream(fullpath)
-          };
-          
-          drive.files.create({
-            resource: fileMetadata,
-            media: media,
-            fields: 'id'
-          }, function (err, file) {
-            if (err) {
-              // Handle error
-              logger.info("Failed..." + file);
-              logger.error(err);
-              fs.appendFileSync(filedone, "Error : " + file + "\r\n");
-            } else {
-              logger.info("Succeeded... File Id: "+ file.id + "\r\n");
-              fs.appendFileSync(filedone, "Uploaded : " + file + "\r\n");
+          if(fullpath.trim()) {
+            // upload this file.... 
+            var filename = path.basename(fullpath);
+            logger.info("File Type : " + path.extname(filename));
+            var mType = 'video/H264';
+            if(path.extname(filename) === '.jpg') {
+              mType = 'image/jpeg';
             }
-          });
-          
-        }
+
+            logger.info("mediaType : " + mType);
+            
+
+            if(mType === 'image/jpeg') {
+              var fileMetadata = {
+                'name': filename
+              };
+
+              logger.info("Uploading File : " + fullpath);
+              var media = {
+                mimeType: mType,
+                body: fs.createReadStream(fullpath)
+              };
+              
+              drive.files.create({
+                resource: fileMetadata,
+                media: media,
+                fields: 'id'
+              }, function (err, file) {
+                if (err) {
+                  // Handle error
+                  logger.info("Failed..." + file);
+                  logger.error(err);
+                  fs.appendFileSync(filedone, "Error : " + file + "\r\n");
+                } else {
+                  logger.info("Succeeded... File Id: "+ file.id + "\r\n");
+                  fs.appendFileSync(filedone, "Uploaded : " + file + "\r\n");
+                }
+              });
+            }
+          }
+        });
       });
       //delete the lock after uploading...
       fs.unlinkSync(lock2);

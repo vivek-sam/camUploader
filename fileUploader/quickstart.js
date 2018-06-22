@@ -188,14 +188,13 @@ function listFiles(auth) {
 
     if(fs.existsSync(data2)) {
       //this means there is a data 2 which we need to work on
-
-      logger.info("File : " + fullpath);
+      
       //first lock the file... 
       fs.closeSync(fs.openSync(lock2, 'w'));
       logger.info('Created Lock 2 for uploading...');
       
       fs.readFileSync(data2).toString().split('\n').forEach(function (fullpath) { 
-        console.log(fullpath);
+        logger.info("File : " + fullpath);
         // upload this file.... 
         var filename = path.basename(fullepath);
         var mType = 'video/H264';

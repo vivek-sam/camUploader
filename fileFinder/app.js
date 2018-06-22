@@ -8,7 +8,10 @@ const env = process.env.NODE_ENV || 'development';
 const logDir = '../../working/log';
 const locksDir = '../../working/lock';
 
-require('../common');
+const lock1 = `${logDir}/filelist1.lock`
+const lock2 = `${logDir}/filelist2.lock`
+const data1 = `${logDir}/filelist1.data`
+const data2 = `${logDir}/filelist2.data`
 
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {

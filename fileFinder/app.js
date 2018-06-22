@@ -8,10 +8,7 @@ const env = process.env.NODE_ENV || 'development';
 const logDir = '../../working/log';
 const locksDir = '../../working/lock';
 
-const lock1 = `${logDir}/filelist1.lock`
-const lock2 = `${logDir}/filelist2.lock`
-const data1 = `${logDir}/filelist1.data`
-const data2 = `${logDir}/filelist2.data`
+require('../common');
 
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {
@@ -33,11 +30,11 @@ var logger = new (winston.Logger)({
       level: 'info'
     }),
     new (winston.transports.File)({
-      filename: `${logDir}/results.log`,
+      filename: `${logDir}/monitorresults.log`,
       timestamp: tsFormat,
       datePattern: 'yyyy-MM-dd',
       prepend: true,
-      level: env === 'development' ? 'verbose' : 'info'
+      level: 'silly'
     })
     ]
 });

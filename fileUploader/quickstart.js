@@ -192,6 +192,8 @@ function listFiles(auth) {
       fs.unlinkSync(lock1);
       logger.info('Deleting Lock 1...');
       //also delete the file 1.. since its over.. 
+      fs.unlinkSync(data1);
+      logger.info('Deleting File 1...');
     } else {
       //delete the lock
       fs.unlinkSync(lock1);
@@ -256,6 +258,8 @@ function listFiles(auth) {
       //delete the lock after uploading...
       fs.unlinkSync(lock2);
       logger.info('Deleting Lock 2...');
+      fs.unlinkSync(data2);
+      logger.info('Deleting File 2...');
     } else {
 
       //check of lock exists.. if yes delete it...

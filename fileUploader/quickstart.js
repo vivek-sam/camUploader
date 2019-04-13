@@ -227,6 +227,7 @@ function listFiles(auth) {
             
 
             if(mType === 'image/jpeg') {
+              
               var fileMetadata = {
                 'name': filename
               };
